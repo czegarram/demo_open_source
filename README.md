@@ -526,7 +526,7 @@ do_normal_build()
         # github tarballs have a directory in the form of "otp[_-]TAGNAME"
         # Ericsson tarballs have the classic otp_src_RELEASE pattern
         # Standardize on Ericsson format because that's what the rest of the script expects
-        (cd "$UNTARDIRNAME" && gunzip "$KERL_DOWNLOAD_DIR/$FILENAME.tar.gz" && tar xf "$KERL_DOWNLOAD_DIR/$FILENAME.tar" && mv ./* "$KERL_BUILD_DIR/$2/otp_src_$1")
+        (cd "$UNTARDIRNAME" && gtar xzf "$KERL_DOWNLOAD_DIR/$FILENAME.tar.gz" && mv ./* "$KERL_BUILD_DIR/$2/otp_src_$1")
         rm -rf "$UNTARDIRNAME"
     fi
 
@@ -925,21 +925,18 @@ ACTIVATE_CSH
 download_manpages()
 {
     FILENAME=otp_doc_man_$1.tar.gz
-    FILENAME2=otp_doc_man_$1.tar
     tarball_download "$FILENAME"
     echo "Extracting manpages"
-    cd "$absdir" && gunzip "$KERL_DOWNLOAD_DIR/$FILENAME" && tar xf "$KERL_DOWNLOAD_DIR/$FILENAME2"
+    cd "$absdir" && gtar xzf "$KERL_DOWNLOAD_DIR/$FILENAME"
 }
 
 download_htmldocs()
 {
     FILENAME="otp_doc_html_$1.tar.gz"
-    FILENAME2="otp_doc_html_$1.tar"
     tarball_download "$FILENAME"
     echo "Extracting HTML docs"
-    gunzip "$KERL_DOWNLOAD_DIR/$FILENAME"
     (cd "$absdir" && mkdir -p html && \
-        tar -C "$absdir/html" -xzf "$KERL_DOWNLOAD_DIR/$FILENAME2")
+        gtar -C "$absdir/html" -xzf "$KERL_DOWNLOAD_DIR/$FILENAME")
 }
 
 build_plt()
