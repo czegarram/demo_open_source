@@ -618,7 +618,7 @@ _do_build()
     fi
     echo -n $KERL_CONFIGURE_OPTIONS | ggrep "--enable-native-libs" 1>/dev/null 2>&1
     if [ $? -ne 0 ]; then
-        make clean >> "$LOGFILE" 2>&1
+        gmake clean >> "$LOGFILE" 2>&1
         CFLAGS="$CFLAGS" ./otp_build configure $KERL_CONFIGURE_OPTIONS >> "$LOGFILE" 2>&1
     fi
     if [ $? -ne 0 ]; then
@@ -662,13 +662,13 @@ _do_build()
     fi
     if [ -n "$KERL_BUILD_DOCS" ]; then
         echo "Building docs..."
-        make docs >> "$LOGFILE" 2>&1
+        gmake docs >> "$LOGFILE" 2>&1
         if [ $? -ne 0 ]; then
             show_logfile "Building docs failed." "$LOGFILE"
             list_remove builds "$1 $2"
             exit 1
         fi
-        make install-docs >> "$LOGFILE" 2>&1
+        gmake install-docs >> "$LOGFILE" 2>&1
         if [ $? -ne 0 ]; then
             show_logfile "Installing docs failed." "$LOGFILE"
             list_remove builds "$1 $2"
