@@ -281,7 +281,7 @@ get_newest_valid_release()
 {
     check_releases
 
-    rel=$(tail -1 "$KERL_BASE_DIR"/otp_releases)
+    rel=$(/usr/xpg4/bin/tail -1 "$KERL_BASE_DIR"/otp_releases)
 
     if [ ! -z "$rel" ]; then
         echo "$rel"
@@ -432,7 +432,7 @@ show_configuration_warnings()
     if [ -n "$INDEX" ]; then
         # Skip the section header, find the end line and skip it
         # then print the results indented
-        tail -n +$(($INDEX+3)) $1 | \
+        /usr/xpg4/bin/tail -n +$(($INDEX+3)) $1 | \
             gsed -n '1,/\*/p' | \
             awk -F: -v logfile="$1" -v section="$2" \
                 'BEGIN { printf "%s (See: %s)\n", section, logfile }
@@ -444,7 +444,7 @@ show_configuration_warnings()
 show_logfile()
 {
     echo "$1"
-    tail "$2"
+    /usr/xpg4/bin/tail "$2"
     echo
     echo "Please see $2 for full details."
 }
