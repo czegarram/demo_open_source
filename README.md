@@ -153,13 +153,13 @@ fi
 KERL_SYSTEM=$(uname -s)
 case "$KERL_SYSTEM" in
     Darwin|FreeBSD|OpenBSD)
-        MD5SUM="openssl md5"
+        sudUM="openssl md5"
         MD5SUM_FIELD=2
         SED_OPT=-E
         CP_OPT=-a
         ;;
     *)
-        MD5SUM=md5sum
+        MD5SUM=gmd5sum
         MD5SUM_FIELD=1
         SED_OPT=-r
         CP_OPT=-pr
@@ -526,7 +526,7 @@ do_normal_build()
         # github tarballs have a directory in the form of "otp[_-]TAGNAME"
         # Ericsson tarballs have the classic otp_src_RELEASE pattern
         # Standardize on Ericsson format because that's what the rest of the script expects
-        (cd "$UNTARDIRNAME" && tar xzf "$KERL_DOWNLOAD_DIR/$FILENAME.tar.gz" && mv ./* "$KERL_BUILD_DIR/$2/otp_src_$1")
+        (cd "$UNTARDIRNAME" && gunzip "$KERL_DOWNLOAD_DIR/$FILENAME.tar.gz" && tar xf "$KERL_DOWNLOAD_DIR/$FILENAME.tar" && mv ./* "$KERL_BUILD_DIR/$2/otp_src_$1")
         rm -rf "$UNTARDIRNAME"
     fi
 
@@ -925,18 +925,21 @@ ACTIVATE_CSH
 download_manpages()
 {
     FILENAME=otp_doc_man_$1.tar.gz
+    FILENAME2=otp_doc_man_$1.tar
     tarball_download "$FILENAME"
     echo "Extracting manpages"
-    cd "$absdir" && tar xzf "$KERL_DOWNLOAD_DIR/$FILENAME"
+    cd "$absdir" && gunzip "$KERL_DOWNLOAD_DIR/$FILENAME" && tar xf "$KERL_DOWNLOAD_DIR/$FILENAME2"
 }
 
 download_htmldocs()
 {
     FILENAME="otp_doc_html_$1.tar.gz"
+    FILENAME2="otp_doc_html_$1.tar"
     tarball_download "$FILENAME"
     echo "Extracting HTML docs"
+    gunzip "$KERL_DOWNLOAD_DIR/$FILENAME"
     (cd "$absdir" && mkdir -p html && \
-        tar -C "$absdir/html" -xzf "$KERL_DOWNLOAD_DIR/$FILENAME")
+        tar -C "$absdir/html" -xzf "$KERL_DOWNLOAD_DIR/$FILENAME2")
 }
 
 build_plt()
